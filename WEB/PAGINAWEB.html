@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANTECH | Soluciones Tecnológicas Inteligentes</title>
+    
+    <!-- Fuentes Futuristas -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Íconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: {
+                            cyan: '#00f3ff',
+                            purple: '#bc13fe',
+                            blue: '#0b40e0',
+                            dark: '#050505',
+                            card: 'rgba(255, 255, 255, 0.03)'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 20px #00f3ff' },
+                            '50%': { opacity: .5, boxShadow: '0 0 5px #00f3ff' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==================== ESTILOS CUSTOM (GLASSMORPHISM, GLITCH, NEON) ==================== */
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Futurista */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #bc13fe; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+        /* Loader */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+        .loader-ring {
+            width: 80px; height: 80px; border: 3px solid transparent;
+            border-top-color: #00f3ff; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loader-ring::before {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 3px solid transparent; border-top-color: #bc13fe; border-radius: 50%;
+            animation: spin 2s linear infinite reverse;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(20, 20, 25, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2), inset 0 0 15px rgba(188, 19, 254, 0.1);
+        }
+
+        /* Texto Glitch */
+        .glitch {
+            position: relative;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+        }
+        .glitch::before {
+            left: 2px; text-shadow: -1px 0 red; clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px; text-shadow: -1px 0 #00f3ff; clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(62px, 9999px, 42px, 0); }
+            40% { clip: rect(16px, 9999px, 78px, 0); }
+            60% { clip: rect(89px, 9999px, 13px, 0); }
+            80% { clip: rect(45px, 9999px, 56px, 0); }
+            100% { clip: rect(98px, 9999px, 23px, 0); }
+        }
+
+        /* Botones Neon */
+        .btn-neon {
+            position: relative; overflow: hidden;
+            border: 1px solid #00f3ff; color: #00f3ff;
+            text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.2s; z-index: 1;
+        }
+        .btn-neon:hover {
+            color: #050505; background: #00f3ff;
+            box-shadow: 0 0 10px #00f3ff, 0 0 40px #00f3ff, 0 0 80px #00f3ff;
+        }
+        .btn-neon-purple {
+            border: 1px solid #bc13fe; color: #bc13fe;
+        }
+        .btn-neon-purple:hover {
+            color: #fff; background: #bc13fe;
+            box-shadow: 0 0 10px #bc13fe, 0 0 40px #bc13fe, 0 0 80px #bc13fe;
+        }
+
+        /* Fondo Partículas */
+        #particles-js { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
+
+        /* Dashboard Visual UI */
+        .mock-chart {
+            background: linear-gradient(180deg, rgba(0, 243, 255, 0.2) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: 2px solid #00f3ff;
+            position: relative;
+        }
+        .bar-animated {
+            animation: growBar 2s ease-out forwards; transform-origin: bottom;
+        }
+        @keyframes growBar { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
+
+        .floating-element { animation: float 6s ease-in-out infinite; }
+        .delay-1 { animation-delay: 1s; }
+        .delay-2 { animation-delay: 2s; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Pantalla de Carga -->
+    <div id="loader">
+        <div class="loader-ring mb-4"></div>
+        <h2 class="font-display tracking-[0.3em] text-neon-cyan text-sm animate-pulse">INICIANDO SISTEMA_</h2>
+    </div>
+
+    <!-- Fondo Interactivo -->
+    <div id="particles-js"></div>
+
+    <!-- Navegación Glassmorphism -->
+    <nav class="fixed w-full z-50 glass-card border-none rounded-none border-b border-gray-800 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#" class="flex items-center gap-3 group">
+                    <i class="fas fa-microchip text-3xl text-neon-cyan group-hover:text-neon-purple transition-colors duration-300"></i>
+                    <span class="font-display font-bold text-2xl tracking-widest text-white">SAN<span class="text-neon-cyan">TECH</span></span>
+                </a>
+                <div class="hidden md:flex space-x-8 text-sm font-display tracking-wider">
+                    <a href="#servicios" class="hover:text-neon-cyan transition-colors">SERVICIOS</a>
+                    <a href="#ventas" class="hover:text-neon-cyan transition-colors">TIENDA</a>
+                    <a href="#ia" class="hover:text-neon-cyan transition-colors">I.A.</a>
+                    <a href="#contacto" class="btn-neon px-5 py-2 rounded">CONTACTAR</a>
+                </div>
+                <!-- Menú Móvil -->
+                <button class="md:hidden text-neon-cyan text-2xl"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Principal -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Elementos 3D flotantes (CSS puramente visual) -->
+        <div class="absolute top-1/4 left-10 text-neon-purple opacity-30 text-6xl floating-element"><i class="fas fa-server"></i></div>
+        <div class="absolute bottom-1/4 right-10 text-neon-cyan opacity-30 text-8xl floating-element delay-1"><i class="fas fa-shield-halved"></i></div>
+        <div class="absolute top-1/3 right-1/4 text-white opacity-10 text-5xl floating-element delay-2"><i class="fas fa-code-branch"></i></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center gs_reveal">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full border border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan font-display text-sm tracking-widest backdrop-blur-sm">
+                <i class="fas fa-satellite-dish animate-pulse mr-2"></i> CONECTANDO AL FUTURO
+            </div>
+            <h1 class="text-5xl md:text-7xl font-display font-black mb-6 leading-tight">
+                <span class="block text-white">SOLUCIONES TECNOLÓGICAS</span>
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple glitch" data-text="INTELIGENTES">INTELIGENTES</span>
+            </h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light mb-10">
+                Potenciamos empresas y profesionales con infraestructura avanzada, automatización IA y hardware de última generación.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-6 font-display text-sm">
+                <a href="#servicios" class="btn-neon px-8 py-4 rounded flex items-center justify-center gap-2">
+                    <i class="fas fa-wrench"></i> Solicitar Soporte
+                </a>
+                <a href="#ventas" class="btn-neon-purple px-8 py-4 rounded flex items-center justify-center gap-2">
+                    <i class="fas fa-key"></i> Comprar Licencias
+                </a>
+                <a href="#contacto" class="glass-card px-8 py-4 rounded flex items-center justify-center gap-2 hover:text-neon-cyan">
+                    <i class="fas fa-laptop"></i> Cotizar Equipos
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-gray-500">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Dashboard Tecnológico (Visual Decorativo) -->
+    <section class="py-10 border-y border-gray-800 bg-black/50 backdrop-blur-md gs_reveal">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="text-neon-cyan text-4xl mb-2"><i class="fas fa-network-wired"></i></div>
+                    <div class="text-3xl font-display font-bold">99.9%</div>
+                    <div class="text-xs text-gray-400 tracking-widest mt-1">UPTIME SERVIDORES</div>
+                </div>
+                <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                    <div class="absolute inset-0 mock-chart opacity-20"></div>
+                    <div class="text-neon-purple text-4xl mb-2 relative z-10"><i class="fas fa-shield-virus"></i></div>
+                    <div class="text-3xl font-display font-bold relative z-10">0</div>
+                    <div class="text-xs text-gray-400 tracking-widest mt-1 relative z-10">BRECHAS DETECTADAS</div>
+                </div>
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="text-blue-500 text-4xl mb-2"><i class="fas fa-microchip"></i></div>
+                    <div class="text-3xl font-display font-bold">2.4<span class="text-sm">PB</span></div>
+                    <div class="text-xs text-gray-400 tracking-widest mt-1">DATOS PROCESADOS</div>
+                </div>
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="text-green-500 text-4xl mb-2"><i class="fas fa-users-cog"></i></div>
+                    <div class="text-3xl font-display font-bold">24/7</div>
+                    <div class="text-xs text-gray-400 tracking-widest mt-1">MONITOREO ACTIVO</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios Empresariales -->
+    <section id="servicios" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 gs_reveal">
+                <h2 class="text-sm text-neon-cyan font-display tracking-[0.3em] mb-2">OPERACIONES CORE</h2>
+                <h3 class="text-4xl md:text-5xl font-display font-bold text-white mb-6">SERVICIOS DE <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-cyan">INFRAESTRUCTURA</span></h3>
+                <div class="h-1 w-24 bg-gradient-to-r from-neon-cyan to-neon-purple mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="tilt-card glass-card p-8 rounded-2xl group gs_reveal">
+                    <div class="w-16 h-16 rounded-lg bg-neon-cyan/10 flex items-center justify-center border border-neon-cyan/30 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-screwdriver-wrench text-3xl text-neon-cyan"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold mb-3 text-white">Soporte Técnico Especializado</h4>
+                    <p class="text-gray-400 text-sm">Mantenimiento preventivo y correctivo de hardware/software. Diagnóstico profundo y reparación de equipos a nivel corporativo.</p>
+                </div>
+                <!-- Service Card 2 -->
+                <div class="tilt-card glass-card p-8 rounded-2xl group gs_reveal">
+                    <div class="w-16 h-16 rounded-lg bg-neon-purple/10 flex items-center justify-center border border-neon-purple/30 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-database text-3xl text-neon-purple"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold mb-3 text-white">ERP, BI & Bases de Datos</h4>
+                    <p class="text-gray-400 text-sm">Implementación de sistemas de gestión empresarial y Business Intelligence para toma de decisiones basada en datos.</p>
+                </div>
+                <!-- Service Card 3 -->
+                <div class="tilt-card glass-card p-8 rounded-2xl group gs_reveal">
+                    <div class="w-16 h-16 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/30 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-server text-3xl text-blue-500"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold mb-3 text-white">Servidores & Virtualización</h4>
+                    <p class="text-gray-400 text-sm">Instalación, configuración y administración de servidores físicos y entornos virtualizados (VMware, Hyper-V).</p>
+                </div>
+                <!-- Service Card 4 -->
+                <div class="tilt-card glass-card p-8 rounded-2xl group gs_reveal">
+                    <div class="w-16 h-16 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/30 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shield-halved text-3xl text-green-500"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold mb-3 text-white">Redes & Seguridad</h4>
+                    <p class="text-gray-400 text-sm">Diseño de topologías de red, implementación de firewalls, VPNs y políticas de ciberseguridad Zero Trust.</p>
+                </div>
+                <!-- Service Card 5 -->
+                <div class="tilt-card glass-card p-8 rounded-2xl group gs_reveal">
+                    <div class="w-16 h-16 rounded-lg bg-yellow-500/10 flex items-center justify-center border border-yellow-500/30 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-tie text-3xl text-yellow-500"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold mb-3 text-white">Consultoría Tecnológica</h4>
+                    <p class="text-gray-400 text-sm">Auditorías IT, planes de transformación digital y optimización de costos en infraestructura tecnológica.</p>
+                </div>
+                <!-- Service Card 6 -->
+                <div class="tilt-card glass-card p-8 rounded-2xl group gs_reveal border-neon-cyan/40 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
+                    <div class="w-16 h-16 rounded-lg bg-white/10 flex items-center justify-center border border-white/30 mb-6">
+                        <i class="fas fa-headset text-3xl text-white"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold mb-3 text-white">Mesa de Ayuda 24/7</h4>
+                    <p class="text-gray-400 text-sm">Soporte remoto e in-situ permanente para garantizar la continuidad operativa de tu negocio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección IA & Innovación -->
+    <section id="ia" class="py-24 relative overflow-hidden bg-gradient-to-b from-transparent via-neon-purple/5 to-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2 gs_reveal">
+                    <!-- Hologram Mockup -->
+                    <div class="relative w-full h-96 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-neon-purple/20 blur-[100px] rounded-full"></div>
+                        <div class="glass-card w-full h-full rounded-full border border-neon-purple/30 flex items-center justify-center animate-float relative overflow-hidden">
+                            <!-- Efecto escáner -->
+                            <div class="absolute top-0 left-0 w-full h-2 bg-neon-cyan/50 shadow-[0_0_20px_#00f3ff] animate-[float_3s_ease-in-out_infinite]"></div>
+                            <i class="fas fa-brain text-9xl text-transparent bg-clip-text bg-gradient-to-b from-neon-purple to-neon-cyan"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 gs_reveal">
+                    <h2 class="text-sm text-neon-purple font-display tracking-[0.3em] mb-2">NEXT-GEN TECH</h2>
+                    <h3 class="text-4xl md:text-5xl font-display font-bold text-white mb-6">INTEGRACIÓN CON <span class="text-neon-cyan">INTELIGENCIA ARTIFICIAL</span></h3>
+                    <p class="text-gray-400 mb-8">Llevamos tu empresa a la industria 4.0. Implementamos soluciones de IA generativa y analítica predictiva para automatizar procesos y escalar tu negocio.</p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-4 glass-card p-4 rounded-lg">
+                            <i class="fas fa-robot text-2xl text-neon-cyan"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Chatbots & Asistentes Virtuales</h4>
+                                <p class="text-xs text-gray-400">Atención automatizada 24/7 con IA conversacional.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4 glass-card p-4 rounded-lg border-neon-purple/30">
+                            <i class="fas fa-chart-pie text-2xl text-neon-purple"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Analítica Predictiva</h4>
+                                <p class="text-xs text-gray-400">Algoritmos para prever tendencias y optimizar inventarios.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4 glass-card p-4 rounded-lg">
+                            <i class="fas fa-cogs text-2xl text-blue-400"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Automatización RPA</h4>
+                                <p class="text-xs text-gray-400">Eliminación de tareas repetitivas mediante robots de software.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tienda / Ventas 3D -->
+    <section id="ventas" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 gs_reveal">
+                <h2 class="text-sm text-neon-cyan font-display tracking-[0.3em] mb-2">CATÁLOGO HARDWARE & SOFTWARE</h2>
+                <h3 class="text-4xl md:text-5xl font-display font-bold text-white mb-6">VENTA DE <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-blue-500">TECNOLOGÍA</span></h3>
+                <div class="h-1 w-24 bg-gradient-to-r from-neon-cyan to-blue-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card Venta 1 -->
+                <div class="tilt-card glass-card rounded-2xl p-6 text-center flex flex-col items-center justify-between gs_reveal">
+                    <div class="w-full h-40 bg-gradient-to-br from-gray-800 to-black rounded-xl border border-gray-700 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fab fa-windows text-6xl text-blue-400 z-10"></i>
+                        <div class="absolute inset-0 bg-blue-400/10 mix-blend-overlay"></div>
+                    </div>
+                    <h4 class="font-display font-bold text-lg mb-2">Licencias Microsoft</h4>
+                    <p class="text-xs text-gray-400 mb-4">Windows 11 Pro, Office 365, Windows Server y SQL Server 100% Originales.</p>
+                    <button class="w-full btn-neon py-2 text-xs rounded">Cotizar Ahora</button>
+                </div>
+
+                <!-- Card Venta 2 -->
+                <div class="tilt-card glass-card rounded-2xl p-6 text-center flex flex-col items-center justify-between gs_reveal">
+                    <div class="w-full h-40 bg-gradient-to-br from-gray-800 to-black rounded-xl border border-gray-700 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-laptop-code text-6xl text-gray-300 z-10"></i>
+                        <div class="absolute inset-0 bg-gray-400/10 mix-blend-overlay"></div>
+                    </div>
+                    <h4 class="font-display font-bold text-lg mb-2">Equipos Corporativos</h4>
+                    <p class="text-xs text-gray-400 mb-4">Laptops empresariales, Workstations y PCs de escritorio de alto rendimiento.</p>
+                    <button class="w-full btn-neon py-2 text-xs rounded">Ver Catálogo</button>
+                </div>
+
+                <!-- Card Venta 3 -->
+                <div class="tilt-card glass-card rounded-2xl p-6 text-center flex flex-col items-center justify-between gs_reveal">
+                    <div class="w-full h-40 bg-gradient-to-br from-gray-800 to-black rounded-xl border border-gray-700 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-server text-6xl text-neon-cyan z-10 animate-pulse"></i>
+                        <div class="absolute inset-0 bg-neon-cyan/10 mix-blend-overlay"></div>
+                    </div>
+                    <h4 class="font-display font-bold text-lg mb-2">Servidores & Storage</h4>
+                    <p class="text-xs text-gray-400 mb-4">Servidores Rack/Torre, NAS, SAN y soluciones de respaldo físico.</p>
+                    <button class="w-full btn-neon py-2 text-xs rounded">Solicitar Asesoría</button>
+                </div>
+
+                <!-- Card Venta 4 -->
+                <div class="tilt-card glass-card rounded-2xl p-6 text-center flex flex-col items-center justify-between gs_reveal">
+                    <div class="w-full h-40 bg-gradient-to-br from-gray-800 to-black rounded-xl border border-gray-700 mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-cloud text-6xl text-neon-purple z-10"></i>
+                        <div class="absolute inset-0 bg-neon-purple/10 mix-blend-overlay"></div>
+                    </div>
+                    <h4 class="font-display font-bold text-lg mb-2">Soluciones Cloud</h4>
+                    <p class="text-xs text-gray-400 mb-4">Azure, AWS, Antivirus Cloud y hosting de servidores privados virtuales (VPS).</p>
+                    <button class="w-full btn-neon py-2 text-xs rounded">Explorar Planes</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Por Qué Elegirnos -->
+    <section class="py-20 border-y border-gray-800 bg-black/60 backdrop-blur-md gs_reveal">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-around items-center gap-10 text-center">
+            <div>
+                <i class="fas fa-award text-4xl text-yellow-500 mb-4"></i>
+                <h4 class="font-display font-bold text-xl">Certificaciones</h4>
+                <p class="text-sm text-gray-400">Personal IT certificado</p>
+            </div>
+            <div>
+                <i class="fas fa-clock text-4xl text-neon-cyan mb-4"></i>
+                <h4 class="font-display font-bold text-xl">Respuesta Rápida</h4>
+                <p class="text-sm text-gray-400">SLA garantizado < 4h</p>
+            </div>
+            <div>
+                <i class="fas fa-chart-line text-4xl text-green-500 mb-4"></i>
+                <h4 class="font-display font-bold text-xl">Optimización</h4>
+                <p class="text-sm text-gray-400">Reducción de costos IT</p>
+            </div>
+            <div>
+                <i class="fas fa-handshake text-4xl text-neon-purple mb-4"></i>
+                <h4 class="font-display font-bold text-xl">Partner Estratégico</h4>
+                <p class="text-sm text-gray-400">Acompañamiento continuo</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto Futurista -->
+    <section id="contacto" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 md:p-12 border-neon-cyan/20 relative overflow-hidden gs_reveal">
+                <!-- Glowing orb in background -->
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-neon-cyan/20 rounded-full blur-[80px]"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                    <div>
+                        <h2 class="text-sm text-neon-cyan font-display tracking-[0.3em] mb-2">INICIAR CONEXIÓN</h2>
+                        <h3 class="text-4xl font-display font-bold text-white mb-6">CONTÁCTANOS</h3>
+                        <p class="text-gray-400 mb-8">¿Listo para actualizar la infraestructura de tu empresa? Envíanos tus requerimientos y nuestro equipo de ingenieros se pondrá en contacto en minutos.</p>
+                        
+                        <ul class="space-y-6">
+                            <li class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700 text-neon-cyan">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Email Corporativo</p>
+                                    <p class="font-bold">santiagoalpas@gmail.com</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700 text-green-500">
+                                    <i class="fab fa-whatsapp text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Soporte Directo</p>
+                                    <p class="font-bold">+51 924 181 502</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700 text-neon-purple">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Centro de Operaciones</p>
+                                    <p class="font-bold">Distrito Tecnológico, Lima - Perú</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Formulario -->
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Nombre / Empresa</label>
+                                <input type="text" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors" placeholder="Ej. Santech Corp">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Teléfono</label>
+                                <input type="text" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors" placeholder="+51 ...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Tipo de Servicio</label>
+                            <select class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors appearance-none">
+                                <option>Soporte Técnico Empresarial</option>
+                                <option>Cotización de Licencias/Hardware</option>
+                                <option>Infraestructura y Redes</option>
+                                <option>Soluciones IA & Software</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Mensaje de los requerimientos</label>
+                            <textarea rows="4" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors" placeholder="Describe tu necesidad tecnológica..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-neon py-4 rounded font-bold tracking-widest mt-2 flex justify-center items-center gap-2">
+                            <i class="fas fa-paper-plane"></i> ENVIAR TRANSMISIÓN
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#020202] border-t border-gray-800 pt-16 pb-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="#" class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-microchip text-2xl text-neon-cyan"></i>
+                        <span class="font-display font-bold text-xl tracking-widest text-white">SAN<span class="text-neon-cyan">TECH</span></span>
+                    </a>
+                    <p class="text-gray-500 text-sm max-w-sm mb-6">Arquitectos de tu infraestructura digital. Proveemos hardware, software y servicios de soporte gestionado con tecnología de vanguardia y seguridad Zero Trust.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-neon-cyan border border-gray-800 hover:border-neon-cyan transition-all hover:shadow-[0_0_15px_#00f3ff]"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-neon-purple border border-gray-800 hover:border-neon-purple transition-all hover:shadow-[0_0_15px_#bc13fe]"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-blue-500 border border-gray-800 hover:border-blue-500 transition-all hover:shadow-[0_0_15px_#3b82f6]"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-display text-white font-bold mb-4">ENLACES</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#servicios" class="hover:text-neon-cyan transition-colors">Soporte IT</a></li>
+                        <li><a href="#ventas" class="hover:text-neon-cyan transition-colors">Licenciamiento</a></li>
+                        <li><a href="#ventas" class="hover:text-neon-cyan transition-colors">Venta de Equipos</a></li>
+                        <li><a href="#ia" class="hover:text-neon-cyan transition-colors">Soluciones AI</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-display text-white font-bold mb-4">LEGAL</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-white transition-colors">Políticas de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Términos de Servicio</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">SLA y Garantías</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-900 pt-8 text-center text-xs text-gray-600 font-display tracking-widest">
+                <p>&copy; 2026 SANTECH CORPORATION. SISTEMA INICIALIZADO CORRECTAMENTE.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón WhatsApp Flotante Neon -->
+    <a href="https://wa.me/51999888777" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center text-3xl z-50 shadow-[0_0_20px_#22c55e] hover:scale-110 transition-transform animate-pulse-glow">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts Esenciales: Particles, Vanilla-tilt, GSAP -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // 1. Quitar Loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }, 1000);
+        });
+
+        // 2. Partículas (Efecto Constelación/Red Neuronal)
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#00f3ff", "#bc13fe"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": false },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00f3ff", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.8 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // 3. Efecto 3D Holográfico en Tarjetas
+        VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+            max: 15, // Inclinación máxima
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+            perspective: 1000
+        });
+
+        // 4. GSAP Scroll Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const revealElements = document.querySelectorAll('.gs_reveal');
+        revealElements.forEach((elem) => {
+            gsap.fromTo(elem, 
+                { autoAlpha: 0, y: 50 }, 
+                { duration: 1, autoAlpha: 1, y: 0, ease: "power3.out",
+                  scrollTrigger: {
+                      trigger: elem,
+                      start: "top 85%", // Inicia cuando el 85% del elemento entra
+                      toggleActions: "play none none reverse"
+                  }
+                }
+            );
+        });
+
+        // 5. Navbar dinámica al hacer scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/80', 'backdrop-blur-lg');
+                nav.classList.remove('border-none');
+            } else {
+                nav.classList.remove('bg-black/80', 'backdrop-blur-lg');
+                nav.classList.add('border-none');
+            }
+        });
+    </script>
+</body>
+</html>
