@@ -204,7 +204,8 @@
                 <i class="fas fa-satellite-dish animate-pulse mr-2"></i> CONECTANDO AL FUTURO
             </div>
             <h1 class="text-5xl md:text-7xl font-display font-black mb-6 leading-tight">
-                <span class="block text-white">SOLUCIONES TECNOLÓGICAS</span>
+                <!--<span class="block text-white">SOLUCIONES TECNOLÓGICAS</span> -->
+                <span id="texto-escribir" class="block text-white min-h-[1.2em]"></span>
                 <span class="block text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple glitch" data-text="INTELIGENTES">INTELIGENTES</span>
             </h1>
             <p class="mt-4 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light mb-10">
@@ -545,7 +546,7 @@
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-neon-cyan border border-gray-800 hover:border-neon-cyan transition-all hover:shadow-[0_0_15px_#00f3ff]"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-neon-purple border border-gray-800 hover:border-neon-purple transition-all hover:shadow-[0_0_15px_#bc13fe]"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-blue-500 border border-gray-800 hover:border-blue-500 transition-all hover:shadow-[0_0_15px_#3b82f6]"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61577322774672" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-blue-500 border border-gray-800 hover:border-blue-500 transition-all hover:shadow-[0_0_15px_#3b82f6]"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
                 <div>
@@ -573,7 +574,7 @@
     </footer>
 
     <!-- Botón WhatsApp Flotante Neon -->
-    <a href="https://wa.me/51999888777" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center text-3xl z-50 shadow-[0_0_20px_#22c55e] hover:scale-110 transition-transform animate-pulse-glow">
+    <a href="https://wa.me/51924181502" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center text-3xl z-50 shadow-[0_0_20px_#22c55e] hover:scale-110 transition-transform animate-pulse-glow">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -649,6 +650,78 @@
                 nav.classList.add('border-none');
             }
         });
+
+        // 6. Efecto de escritura para el texto "SOLUCIONES TECNOLÓGICAS"
+        //estatico
+        //const elementoTexto = document.getElementById('texto-escribir');
+        //    const textoFijo = "SOLUCIONES TECNOLÓGICAS";
+        //    let indiceLetra = 0;
+
+        //    function efectoEscribir() {
+
+        //        if (indiceLetra < textoFijo.length) {
+
+        //            elementoTexto.innerHTML += textoFijo.charAt(indiceLetra);
+        //            indiceLetra++;
+        //            setTimeout(efectoEscribir, 100);
+        //        }
+        //    }
+        //    setTimeout(efectoEscribir, 1500);
+
+        //dinamico
+        // --- EFECTO MÁQUINA DE ESCRIBIR INFINITO (MÚLTIPLES PALABRAS) ---
+        const elementoTexto = document.getElementById('texto-escribir');
+        
+        
+        const palabras = [
+            "SOLUCIONES TECNOLÓGICAS", 
+            "INNOVACIÓN DIGITAL", 
+            "SOPORTE EMPRESARIAL",
+            "INTELIGENCIA ARTIFICIAL"
+        ];
+        
+        let indicePalabra = 0; 
+        let indiceLetra = 0;   
+        let borrando = false;  
+
+        function efectoEscribirInfinito() {
+            const palabraActual = palabras[indicePalabra];
+
+            
+            if (borrando) {
+                indiceLetra--;
+            } else {
+                indiceLetra++;
+            }
+            elementoTexto.innerHTML = palabraActual.substring(0, indiceLetra);
+
+            
+            let velocidad = borrando ? 50 : 100;
+
+            
+            if (!borrando && indiceLetra === palabraActual.length) {
+                
+                velocidad = 2000; 
+                borrando = true;
+            } else if (borrando && indiceLetra === 0) {
+                
+                borrando = false;
+                indicePalabra++;
+                
+                
+                if (indicePalabra === palabras.length) {
+                    indicePalabra = 0;
+                }
+                velocidad = 500; 
+            }
+
+            
+            setTimeout(efectoEscribirInfinito, velocidad);
+        }
+
+        
+        setTimeout(efectoEscribirInfinito, 1500);
     </script>
 </body>
 </html>
+
